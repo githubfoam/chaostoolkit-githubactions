@@ -1,0 +1,43 @@
+name: "experiments against a blockchain chaostoolkit macos CI workflow"
+
+
+on:
+  push:
+    branches: [ test ]
+
+jobs:
+
+# https://chaostoolkit.org/reference/usage/install/
+ macos-latest:
+      name: "macos-latest latest"
+      runs-on: macos-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: "brew update"
+        run: brew update      
+      - name: "check on brew version"
+        run: brew --version   #Homebrew 2.5.12   
+      - name: "Get OS X System Version"
+        run: sw_vers       
+      - name: "Get Mac System Details with system_profiler"
+        run: system_profiler | more  
+      - name: "osfingerprinting"
+        run: uname -a    
+    # https://chaostoolkit.org/reference/tutorials/blockchain/        
+      - name: "Install chaostoolkit"
+        run: |           
+          # Install Python 
+          brew install python3
+          # Create a virtual environment
+          python3 -m venv ~/.venvs/chaostk 
+          source  ~/.venvs/chaostk/bin/activate
+          # Install the CLI
+          pip install -U chaostoolkit
+          chaos --version            
+          git clone https://github.com/yolannel/CTKBlockchain
+          cd CTK*
+          # create the blockchain before running the experiment by running the blockchain.py fil
+          python blockchain.py
+          # Running the experiment
+          chaos run testTransaction.json        
