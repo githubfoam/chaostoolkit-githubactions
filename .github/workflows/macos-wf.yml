@@ -33,8 +33,11 @@ jobs:
           python3 -m venv ~/.venvs/chaostk 
           source  ~/.venvs/chaostk/bin/activate
           # Install the CLI
-          pip install -U chaostoolkit
-          chaos --version            
+          # pip install -U chaostoolkit
+          pip install -r requirements.txt
+          chaos --version  
+      - name: "experiments against a blockchain"
+        run: |                                
           git clone https://github.com/yolannel/CTKBlockchain
           cd CTK*
           # create the blockchain before running the experiment by running the blockchain.py fil
